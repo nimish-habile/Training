@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.signup-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    border: 1px solid black;
+}
+
+h1 {
+    margin-bottom: 16px;
+    font-size: 20px;
+    text-align: center;
+    color: rgb(0, 119, 79);;
+}
+
+label {
+    display: block;
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 380px;
+    padding: 8px;
+    margin:0 0 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.formButtons{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgb(0, 119, 79);
+    color: white;
+    font-size: 20px;
+    margin-top: 12px;
+}
+
+.bioLimit{
+    font-size: 12px;
+}
+
+button:hover{
+    background-color: rgb(0, 172, 114);
+}
+
+#firstnameErr, #lastnameErr, #passwordErr, #phoneErr, #dobErr, #emailErr, #bioErr{
+    color: red;
+    font-size: 10px;
+}
+
+.password-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+}
+
+.password-container > input{
+    flex: 1;
+}
+
+.password-container > i{
+    position: absolute;
+    right: 10px;
+}
