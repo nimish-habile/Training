@@ -30,7 +30,31 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function fillTable(){
+    const tableBody = document.getElementById("formDataTable").querySelector("tbody");
+    tableBody.innerHTML="";
+
+    const storedData=localStorage.getItem("signupFormData");
+    console.log("Stored Data:", storedData )
+    if(storedData){
+      const formDataArr = JSON.parse(storedData);
+      formDataArr.forEach(data => {
+        const row = document.createElement("tr");
+
+        Object.keys(data).forEach(key => {
+          
+            const cell = document.createElement("td");
+            cell.textContent = data[key];
+            row.appendChild(cell);
+          
+        });
+        tableBody.appendChild(row)
+      });
+    }
+  }
+
   loadFormData();
+  fillTable();
 
   function validateField(id) {
     const value = document.getElementById(id).value;
@@ -119,6 +143,8 @@ document.addEventListener("DOMContentLoaded", function() {
       localStorage.setItem("signupFormData", JSON.stringify(previousData));
       localStorage.removeItem("formDraft");
       alert("Form data has been saved!");
+
+      fillTable();
     }
   });
 
@@ -133,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
         errorElement.innerHTML = "";
       }
     });
+    fillTable();
   });
 
   inputs.forEach(id => {

@@ -2,9 +2,10 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .signup-form {
@@ -79,4 +80,26 @@ button:hover{
 .password-container > i{
     position: absolute;
     right: 10px;
+}
+
+.divider{
+    border: 1px solid #ccc;
+    width: 100%;
+    margin: 40px 0;
+}
+
+table, tr, th, td, tbody, thead{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.usersDetails{
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#formDataTable{
+    width: 100%;
 }
