@@ -1,9 +1,31 @@
 // 1.  Write a function multiplyWithCallback that accepts two numbers and a callback function as arguments. The function should multiply the two numbers and pass the result to the callback function. 
 
+// function display(text){
+//     console.log(text);
+// }
+
+// function multiplyWithCallback(x, y, callBack){
+//     let prod=x*y;
+//     callBack(prod);
+// }
+
+// multiplyWithCallback(7, 8, display);
+
  
 
 // 2.  Write a function doAsyncOperation that simulates an asynchronous operation. It takes a callback function callback as an argument. Inside doAsyncOperation, perform a setTimeout for 2 seconds and then invoke the callback with a success message. 
 
+// function display(text){
+//     console.log(text);
+// }
+
+// function doAsyncOperation(callback) {
+//     setTimeout(() => {
+//         callback('Operation completed successfully!');
+//     }, 2000);
+// }
+
+// doAsyncOperation(display);
  
 
 // 3.  Write a function delay that returns a promise. The promise should resolve after a given number of milliseconds (delayTime) with the message "Resolved after X milliseconds", where X is delayTime. Pass delayTime as an argument 
@@ -16,7 +38,27 @@
 
 // If there's an error (e.g., status code is not 200), throw an error. 
 
+async function fetchData(endpoint){
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = response.json;
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
  
+const dummyUrl='https://api.example.com/data';
+
+fetchData(dummyUrl)
+    .then(data => {
+        console.log('Data fetched successfuly', data);
+    }).catch(error => {
+        console.log(error)
+    });
 
 // 5.  Write a function using async/await to fetch data from a REST API endpoint (https://api.example.com/data). Parse the JSON response and return the result. 
 
