@@ -1,95 +1,180 @@
 body {
-	margin: 0;
+  margin: 0;
 }
 .header {
-	align-items:center;
-	background-color: #F0F0C9;
-	display: flex;
-	justify-content: space-between;
-	padding: 1rem;
-	position: sticky;
-	top: 0;
-	box-shadow: 4px 4px 10px #ccc;
+  align-items: center;
+  background-color: #f0f0c9;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  box-shadow: 4px 4px 10px #ccc;
 }
 
 .header div {
-	background-color: #fcfcdb;
-	padding: .5rem;
+  background-color: #fcfcdb;
+  padding: 0.5rem;
 }
 
 .header div ul {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .header div li {
-	display: inline;
-	margin-left: .75rem;
-} 
+  display: inline;
+  margin-left: 0.75rem;
+}
 
-.header div li a{
-	color:  #009191;
+.header div li a {
+  color: #009191;
 }
 
 .header h1 {
-	color: #087F8C;
-	text-decoration: none;
+  color: #087f8c;
+  text-decoration: none;
 }
 
 .featuredPosts {
-	background-color: #e6ffff;
-	display:flex;
-	justify-content:space-evenly;
-	padding: 1rem 0;
-	flex-wrap: wrap;
+  background-color: #e6ffff;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 1rem 0;
+  flex-wrap: wrap;
 }
 
 .postCard {
-	background-color: white;
-	box-sizing: border-box;
-	box-shadow: 1px 1px 2px #5b8a8c;
-	padding: 16px;
-	width: 500px;
-	margin: 10px;
-	justify-content: space-evenly;
+  background-color: white;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 2px #5b8a8c;
+  padding: 16px;
+  width: 500px;
+  margin: 10px;
+  justify-content: space-evenly;
 }
 
 .postCard h2 {
-	background-color: #009191;
-	color: white;
-	margin: 0;
-	padding: .5rem 1rem;
+  background-color: #009191;
+  color: white;
+  margin: 0;
+  padding: 0.5rem 1rem;
 }
 
 .postCard p {
-	margin: 0;
-	padding: 1rem;
-	font-size: 24px;
+  margin: 0;
+  padding: 1rem;
+  font-size: 24px;
 }
 .footer {
-	align-items:flex-end;
-	background-color:  #F0F0C9;
-	display:flex;
-	flex-direction:row;
-	font-family: 'Segoe UI', Helvetica, sans-serif;
-	justify-content:space-between;
-	padding: 1rem;
+  align-items: flex-end;
+  background-color: #f0f0c9;
+  display: flex;
+  flex-direction: row;
+  font-family: "Segoe UI", Helvetica, sans-serif;
+  justify-content: space-between;
+  padding: 1rem;
 }
 
 .footer p {
-	margin: 0;
+  margin: 0;
 }
 
 .footer ul {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .footer li {
-	list-style: none;
+  list-style: none;
 }
 
 .footer a {
-	color: #009191;
-	text-decoration: none;
+  color: #009191;
+  text-decoration: none;
+}
+
+.grids {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.grid1 {
+  height: 50vh;
+  width: 90vh;
+  margin: 16px;
+  display: grid;
+  grid-template-areas:
+    "A1 A1 A1"
+    "A2 A3 A4"
+    "A5 A5 A5";
+  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 8px;
+}
+
+.grid1 .c1 {
+  grid-area: A1;
+}
+.grid1 .c2 {
+  grid-area: A2;
+}
+.grid1 .c3 {
+  grid-area: A3;
+}
+.grid1 .c4 {
+  grid-area: A4;
+}
+.grid1 .c5 {
+  grid-area: A5;
+}
+
+.grid2 {
+  height: 80vh;
+  width: 100vh;
+  margin: 16px;
+  display: grid;
+  grid-template-areas:
+    "A1 A1 A2 A2"
+    "A1 A1 A3 A3"
+    "A4 A4 A5 A6"
+    "A7 A8 A8 A6";
+  grid-template-rows: repeat(1fr, 4);
+  grid-template-columns: repeat(1fr, 4);
+  gap: 8px;
+}
+
+.grid2 .c1 {
+  grid-area: A1;
+}
+.grid2 .c2 {
+  grid-area: A2;
+}
+.grid2 .c3 {
+  grid-area: A3;
+}
+.grid2 .c4 {
+  grid-area: A4;
+}
+.grid2 .c5 {
+  grid-area: A5;
+}
+.grid2 .c6 {
+  grid-area: A6;
+}
+.grid2 .c7 {
+  grid-area: A7;
+}
+.grid2 .c8 {
+  grid-area: A8;
+}
+
+.cell {
+  background-color: gray;
+  color: white;
+  text-align: center;
+  font-size: 40px;
+  padding: 10px;
 }
