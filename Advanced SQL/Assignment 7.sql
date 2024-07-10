@@ -1,0 +1,172 @@
+SET SERVEROUTPUT ON;
+SET VERIFY OFF;
+SET DEFINE ON;
+--1.Create a PL/SQL anonymous block that performs the following actions:
+--a) Open a cursor to fetch employee information.
+--b) For each employee, attempt to divide their salary by 0. Handle the "ZERO_DIVIDE" exception at this level by displaying a custom error message for each employee.
+--c) Handle any other exceptions that may occur during the loop by displaying a generic error message.
+--DECLARE
+--  CURSOR EMP_CURSOR
+--  IS
+--    SELECT EMPLOYEE_ID, SALARY FROM EMPLOYEES;
+--  V_EMPLOYEE_ID EMPLOYEES.EMPLOYEE_ID%TYPE;
+--  V_SALARY EMPLOYEES.SALARY%TYPE;
+--BEGIN
+--  OPEN EMP_CURSOR;
+--  LOOP
+--    FETCH EMP_CURSOR INTO V_EMPLOYEE_ID, V_SALARY;
+--    EXIT
+--  WHEN EMP_CURSOR%NOTFOUND;
+--    DBMS_OUTPUT.PUT_LINE(' EMPLOYEE ID ' || V_EMPLOYEE_ID);
+--    DBMS_OUTPUT.PUT_LINE('SALARY: ' || V_SALARY);
+--    IF V_SALARY = 0 THEN
+--      RAISE ZERO_DIVIDE;
+--    END IF;
+--    DBMS_OUTPUT.PUT_LINE('SALARY WHEN DIVIDED BY 0 : ' || (V_SALARY / 0));
+--  END LOOP;
+--  CLOSE EMP_CURSOR;
+--EXCEPTION
+--WHEN ZERO_DIVIDE THEN
+--  DBMS_OUTPUT.PUT_LINE('ERROR: CANNOT DIVIDE SALARY BY ZERO FOR EMPLOYEE ID :' || V_EMPLOYEE_ID);
+--WHEN OTHERS THEN
+--  DBMS_OUTPUT.PUT_LINE('ERROR : ' || SQLERRM);
+--END;
+--2.Create a PL/SQL anonymous block that declares a nested table type to store integers. Initialize a nested table variable and insert some random integers into it. Then, loop through the nested table and display the elements.
+--
+--3.Create a PL/SQL anonymous block that uses a cursor to fetch employee names from the "employees" table and stores them in a collection (nested table or associative array).
+--Then, display the employee names from the collection.
+--DECLARE
+--TYPE EMP_TYPE
+--IS
+--  TABLE OF EMPLOYEES.FIRST_NAME%type INDEX BY BINARY_INTEGER;
+--  EMPLOYEE_NAME EMP_TYPE;
+--  CURSOR EMP_CURSOR
+--  IS
+--    SELECT FIRST_NAME FROM EMPLOYEES;
+--BEGIN
+--  OPEN EMP_CURSOR;
+--  FOR I IN 1..175
+--  LOOP
+--    FETCH EMP_CURSOR INTO EMPLOYEE_NAME(I);
+--    EXIT
+--  WHEN EMP_CURSOR%NOTFOUND;
+--  END LOOP;
+--  CLOSE EMP_CURSOR;
+--  FOR I IN 1..EMPLOYEE_NAME.COUNT
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE(EMPLOYEE_NAME(I));
+--  END LOOP;
+--EXCEPTION
+--WHEN OTHERS THEN
+--  DBMS_OUTPUT.PUT_LINE('ERROR : ' || SQLERRM);
+--END;
+--4.Write a PL/SQL anonymous block that uses a cursor to fetch employee salaries from the "employees" table.
+--If a salary is greater than 10000, display it. Handle any exceptions that may occur.
+--DECLARE
+--TYPE EMP_TYPE
+--IS
+--  TABLE OF EMPLOYEES.SALARY%TYPE INDEX BY BINARY_INTEGER;
+--  EMP_SALARY EMP_TYPE;
+--  CURSOR EMP_CURSOR
+--  IS
+--    SELECT SALARY FROM EMPLOYEES WHERE SALARY>10000;
+--  V_COUNT NUMBER := 1;
+--BEGIN
+--  OPEN EMP_CURSOR;
+--  FOR I IN 1..175
+--  LOOP
+--    FETCH EMP_CURSOR INTO EMP_SALARY(V_COUNT);
+--    V_COUNT := V_COUNT+1;
+--    EXIT
+--  WHEN EMP_CURSOR%NOTFOUND;
+--  END LOOP;
+--  CLOSE EMP_CURSOR;
+--  FOR I IN 1..EMP_SALARY.COUNT+1
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE(EMP_SALARY(I));
+--  END LOOP;
+--EXCEPTION
+--WHEN OTHERS THEN
+--  DBMS_OUTPUT.PUT_LINE('ERROR : ' || SQLERRM);
+--END;
+--5. Create a PL/SQL anonymous block that handles the "NO_DATA_FOUND" exception for a SELECT statement on the "employees" table.
+--Instead of displaying the default Oracle error message, raise a custom exception with the error code -20101 and an error message "No employees found for the given criteria."
+--DECLARE
+--  V_FIRST_NAME EMPLOYEES.FIRST_NAME%TYPE;
+--  V_LAST_NAME EMPLOYEES.LAST_NAME%TYPE;
+--  V_SALARY EMPLOYEES.SALARY%TYPE;
+--BEGIN
+--  SELECT FIRST_NAME,
+--    LAST_NAME,
+--    SALARY
+--  INTO V_FIRST_NAME,
+--    V_LAST_NAME,
+--    V_SALARY
+--  FROM EMPLOYEES
+--  WHERE EMPLOYEE_ID = '&ENTER_EMLPOYEE_ID_TO_GET_DETAILS';
+--EXCEPTION
+--WHEN NO_DATA_FOUND THEN
+--  RAISE_APPLICATION_ERROR(-20101, 'No employees found for the given criteria.');
+--END;
+--6.Write a PL/SQL anonymous block that performs the following actions:
+--a) Attempts to update an employee's salary in the "employees" table.
+--b) Handle the "TOO_MANY_ROWS" exception and raise a custom exception with error code -20102 and an error message "More than one employee found for the given criteria."
+--c) Handle the "NO_DATA_FOUND" exception and raise a custom exception with error code -20103 and an error message "No employee found for the given criteria."
+--d) Handle all other exceptions by displaying a generic error message.
+--DECLARE
+--  V_NEW_SALARY EMPLOYEES.SALARY%TYPE := '&ENTER_NEW_SALARY';
+--  E_TOO_MANY_ROWS EXCEPTION;
+--  PRAGMA EXCEPTION_INIT(E_TOO_MANY_ROWS, -20102);
+--  E_NO_DATA_FOUND EXCEPTION;
+--  PRAGMA EXCEPTION_INIT(E_NO_DATA_FOUND, -20103);
+--BEGIN
+--  UPDATE EMPLOYEES
+--  SET SALARY      = V_NEW_SALARY
+--  WHERE SALARY    = '&ENTER_THE_PREVIOUS_SALARY';
+--  IF SQL%ROWCOUNT = 0 THEN
+--    RAISE E_NO_DATA_FOUND;
+--  ELSIF SQL%ROWCOUNT > 1 THEN
+--    RAISE E_TOO_MANY_ROWS;
+--  END IF;
+--EXCEPTION
+--WHEN E_TOO_MANY_ROWS THEN
+--  RAISE_APPLICATION_ERROR(-20102, 'More than one employee found for the given criteria.');
+--WHEN E_NO_DATA_FOUND THEN
+--  RAISE_APPLICATION_ERROR(-20103, 'No employees found for the given criteria.');
+--WHEN OTHERS THEN
+--  DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+--END;
+--7.Create a PL/SQL anonymous block that prompts the user to enter an employee ID.
+--ATTEMPT TO FETCH THE EMPLOYEE's name and salary from the "employees" table.
+--If the employee is not found, raise a user-defined error with the error code -20201 and an error message "Employee ID not found."
+--If the entered employee ID is negative, raise a user-defined error with the error code -20202 and an error message "Invalid employee ID entered."
+--DECLARE
+--  V_EMP_ID EMPLOYEES.EMPLOYEE_ID%TYPE := '&ENTER_EMP_ID';
+--  V_SALARY EMPLOYEES.SALARY%TYPE;
+--  V_EMP_NAME EMPLOYEES.FIRST_NAME%TYPE;
+--BEGIN
+--
+--  IF V_EMP_ID<0 THEN
+--  RAISE_APPLICATION_ERROR(-20102, 'Invalid employee ID entered.');
+--  END IF;
+--  SELECT FIRST_NAME, SALARY INTO V_EMP_NAME, V_SALARY FROM EMPLOYEES WHERE EMPLOYEE_ID=V_EMP_ID;
+--
+--EXCEPTION
+--WHEN NO_DATA_FOUND THEN
+--  RAISE_APPLICATION_ERROR(-20101, 'Employee ID not found.');
+--END;
+--8.Write a PL/SQL anonymous block that handles the "DUP_VAL_ON_INDEX" exception when inserting a new department record into the "departments" table.
+--INSTEAD OF displaying the DEFAULT Oracle error MESSAGE, raise a custom error USING RAISE_APPLICATION_ERROR
+--WITH the error code -20301 AND an error MESSAGE "Department ID already exists."
+--DECLARE
+--  V_DEPT_ID DEPARTMENTS.DEPARTMENT_ID%TYPE     := '&ENTER_DEPT_ID';
+--  V_DEPT_NAME DEPARTMENTS.DEPARTMENT_NAME%TYPE := '&ENTER_DEPT_NAME';
+--  V_LOC_ID DEPARTMENTS.LOCATION_ID%TYPE        := '&ENTER_LOCATION';
+--BEGIN
+--  INSERT INTO DEPARTMENTS VALUES
+--    (V_DEPT_ID, V_DEPT_NAME, V_LOC_ID
+--    );
+--EXCEPTION
+--WHEN DUP_VAL_ON_INDEX THEN
+--  RAISE_APPLICATION_ERROR(-20301, 'Department ID already exists.');
+--END;
