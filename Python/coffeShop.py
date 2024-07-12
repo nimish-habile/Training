@@ -44,7 +44,9 @@ while True:
         print("Enter 1 to order an Americano.")
         print("Enter 2 to order an Cappuccino.")
         print("Enter 3 to order an Latte.")
+        
         coffeType = int(input("Enter here: "))
+        
         if coffeType>3 or coffeType<=0:
             print("Please enter a number from 1 to 3.")
         elif Coffee<coffeeDetails[coffeType][0] or Water<coffeeDetails[coffeType][1] or Milk<coffeeDetails[coffeType][2] or Balance<Cost[coffeType]:
@@ -56,22 +58,27 @@ while True:
                 print("Insufficient Milk.")
             if Balance<Cost[coffeType]:
                 print("Insufficient Balance")
+            break
         else:
             Balance-=Cost[coffeType]
             Coffee-=coffeeDetails[coffeType][0]
             Water-=coffeeDetails[coffeType][1]
             Milk-=coffeeDetails[coffeType][2]
+            
             if coffeType==1:
                 print("Your Americano is served.")
             elif coffeType==2:
                 print("Your Cappiccino is served.")
             else:
                 print("Your Latte is served.")
+                
             print("To order again enter anything, to exit enter 0.")
+            
             checkNextOrder = input("Enter here : ")
+            
             if checkNextOrder=="0":
                 print(f"Your balance left now is {Balance}Rs.")
-                break
+                break    
     except ValueError :
         print("Please enter a valid input")
     except:
