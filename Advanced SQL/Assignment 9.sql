@@ -1,27 +1,93 @@
+SET SERVEROUTPUT ON;
+SET VERIFY OFF;
+SET DEFINE ON;
 --1. Write a PL/SQL function called `calculate_area` that takes two parameters: `length` and `width`.
 --The function should calculate and return the area of a rectangle. Test the function with different input values.
---
+--CREATE OR REPLACE FUNCTION CALCULATE_AREA(P_LENGTH IN NUMBER, P_WIDTH IN NUMBER)
+--RETURN NUMBER IS
+--BEGIN
+--  RETURN (P_LENGTH*P_WIDTH);
+--END;
+--/
+--SELECT CALCULATE_AREA(4, 5) AS AREA FROM DUAL;
 --2. Create a PL/SQL function called `reverse_string` that takes a string as input
 --and returns the reverse of the input string.
 --Test the function with various strings, including empty strings.
---
+--CREATE OR REPLACE FUNCTION REVERSE_STRING(P_STRING IN VARCHAR2)
+--RETURN VARCHAR2
+--IS
+--  V_REV VARCHAR2(100);
+--BEGIN
+--  V_REV := '';
+--  FOR I IN REVERSE 1..LENGTH(P_STRING) LOOP
+--    V_REV := V_REV || SUBSTR(P_STRING, I, 1);
+--  END LOOP;
+--  RETURN V_REV;
+--END REVERSE_STRING;
+--/
+--SELECT REVERSE_STRING('ABCDE') AS REV FROM DUAL;
 --3. Write a PL/SQL function called `safe_division` that takes two parameters: `numerator` and `denominator`.
 --The function should perform division and handle the scenario where the `denominator` is zero by returning NULL.
 --Test the function with different input values, including a zero denominator.
+--CREATE OR REPLACE FUNCTION SAFE_DIVISION(P_NUM IN NUMBER, P_DEN IN NUMBER)
+--RETURN NUMBER IS
+--BEGIN
+--IF P_DEN = 0 THEN RETURN NULL;
+--ELSE RETURN (P_NUM/P_DEN);
+--END IF;
+--END;
+--/
 --
+--SELECT SAFE_DIVISION(4,0) AS RES FROM DUAL;
 --4.Create a function get_employee_count that takes a department ID as input
 --and returns the count of employees in that department from an employees table.
+--CREATE OR REPLACE FUNCTION GET_EMPLOYEE_COUNT(P_DEPT_ID IN DEPARTMENTS.DEPARTMENT_ID%TYPE)
+--RETURN NUMBER IS
+--V_COUNT NUMBER;
+--BEGIN
+--SELECT COUNT(*) INTO V_COUNT
+--FROM EMPLOYEES
+--WHERE DEPARTMENT_ID = P_DEPT_ID;
+--RETURN V_COUNT;
+--END;
+--/
 --
+--SELECT GET_EMPLOYEE_COUNT(9) AS EMP_COUNT FROM DUAL;
 --5. Create a function get_employee_salary that takes an employee ID as input and returns the salary of the employee.
 --Handle the case where the employee ID is not found by raising a custom exception.
---
+--CREATE OR REPLACE
+--  FUNCTION GET_EMPLOYEE_SALARY(
+--      P_EMP_ID IN EMPLOYEES.EMPLOYEE_ID%TYPE)
+--    RETURN EMPLOYEES.SALARY%TYPE
+--  IS
+--    V_SALARY EMPLOYEES.SALARY%TYPE;
+--  BEGIN
+--    SELECT SALARY INTO V_SALARY FROM EMPLOYEES WHERE EMPLOYEE_ID = P_EMP_ID;
+--  EXCEPTION
+--  WHEN NO_DATA_FOUND THEN
+--    RAISE_APPLICATION_ERROR(-20201, 'EMPLOYEE ID DOES NOT EXIST.');
+--    RETURN V_SALARY;
+--  END;
+--  /
+--  SELECT GET_EMPLOYEE_SALARY(14) AS EMP_SAL FROM DUAL;
 --6. Create a PL/SQL function named calculate_discount that takes the total amount as input
 --and returns a discount amount based on the following conditions:
---
 --If the total amount is less than 1000, apply a 5% discount.
 --If the total amount is between 1000 and 5000, apply a 10% discount.
 --If the total amount is greater than 5000, apply a 15% discount.
+--CREATE OR REPLACE FUNCTION CALCULATE_DISCOUNT(P_AMOUNT IN NUMBER)
+--RETURN NUMBER IS
+--BEGIN
+--IF P_AMOUNT<1000 THEN
+--RETURN P_AMOUNT*0.95;
+--ELSIF P_AMOUNT <5001 THEN
+--RETURN P_AMOUNT*0.9;
+--ELSE RETURN P_AMOUNT*0.85;
+--END IF;
+--END;
+--/
 --
+--SELECT CALCULATE_DISCOUNT(7000) AS DISC FROM DUAL;
 --7. Create a PL/SQL package called `employee_pkg` to manage employee data. The package should contain:
 --   a. A procedure to insert a new employee into the database.
 --   b. A function to calculate the salary of an employee based on the input of hours worked and hourly rate.
@@ -29,19 +95,304 @@
 --   d. A function to retrieve the number of employees in a specific department.
 --
 --Test each of the package procedures and functions with sample data.
---
+--CREATE OR REPLACE
+--PACKAGE EMPLOYEE_PKG
+--AS
+--  PROCEDURE INSERT_EMPLOYEE(
+--      P_EMP_ID       IN NUMBER,
+--      P_FIRST_NAME   IN EMPLOYEES.FIRST_NAME%TYPE,
+--      P_LAST_NAME    IN EMPLOYEES.FIRST_NAME%TYPE,
+--      P_JOB_ID       IN NUMBER,
+--      P_DEPT_ID      IN NUMBER,
+--      P_EMAIL        IN VARCHAR2,
+--      P_PHONE_NUMBER IN NUMBER,
+--      P_HIRE_DATE    IN DATE,
+--      P_SALARY       IN NUMBER,
+--      P_MANAGER_ID   IN NUMBER);
+--  FUNCTION CALCULATE_SAL(
+--      P_HOURS_WORKED IN NUMBER,
+--      P_HOURLY_RATE  IN NUMBER)
+--    RETURN NUMBER;
+--  PROCEDURE UPDATE_JOB_TITLE(
+--      P_EMP_ID        IN NUMBER,
+--      P_NEW_JOB_TITLE IN VARCHAR2);
+--  FUNCTION NO_OF_EMPLOYEES(
+--      P_DEPT_ID IN DEPARTMENTS.DEPARTMENT_ID%TYPE)
+--    RETURN NUMBER;
+--END EMPLOYEE_PKG;
+--/
+--CREATE OR REPLACE
+--PACKAGE BODY EMPLOYEE_PKG
+--IS
+--PROCEDURE INSERT_EMPLOYEE(
+--    P_EMP_ID       IN NUMBER,
+--    P_FIRST_NAME   IN EMPLOYEES.FIRST_NAME%TYPE,
+--    P_LAST_NAME    IN EMPLOYEES.FIRST_NAME%TYPE,
+--    P_JOB_ID       IN NUMBER,
+--    P_DEPT_ID      IN NUMBER,
+--    P_EMAIL        IN VARCHAR2,
+--    P_PHONE_NUMBER IN NUMBER,
+--    P_HIRE_DATE    IN DATE,
+--    P_SALARY       IN NUMBER,
+--    P_MANAGER_ID   IN NUMBER)
+--IS
+--BEGIN
+--  INSERT
+--  INTO employees
+--    (
+--      EMPLOYEE_ID,
+--      FIRST_NAME,
+--      LAST_NAME,
+--      JOB_ID,
+--      DEPARTMENT_ID,
+--      EMAIL,
+--      PHONE_NUMBER,
+--      HIRE_DATE,
+--      SALARY,
+--      MANAGER_ID
+--    )
+--    VALUES
+--    (
+--      P_EMP_ID,
+--      P_FIRST_NAME,
+--      P_LAST_NAME,
+--      P_JOB_ID,
+--      P_DEPT_ID,
+--      P_EMAIL,
+--      P_PHONE_NUMBER,
+--      P_HIRE_DATE,
+--      P_SALARY,
+--      P_MANAGER_ID
+--    );
+--END INSERT_EMPLOYEE;
+--FUNCTION CALCULATE_SAL
+--  (
+--    P_HOURS_WORKED IN NUMBER,
+--    P_HOURLY_RATE  IN NUMBER
+--  )
+--  RETURN NUMBER
+--IS
+--  V_SALARY NUMBER;
+--BEGIN
+--  V_SALARY := P_HOURS_WORKED * P_HOURLY_RATE;
+--  RETURN V_SALARY;
+--END CALCULATE_SAL;
+--PROCEDURE UPDATE_JOB_TITLE
+--  (
+--    P_EMP_ID        IN NUMBER,
+--    P_NEW_JOB_TITLE IN VARCHAR2
+--  )
+--IS
+--BEGIN
+--  UPDATE EMPLOYEES
+--  SET JOB_ID =
+--    (SELECT JOB_ID FROM JOBS WHERE JOB_TITLE = P_NEW_JOB_TITLE
+--    )
+--  WHERE EMPLOYEE_ID = P_EMP_ID;
+--END UPDATE_JOB_TITLE;
+--FUNCTION NO_OF_EMPLOYEES(
+--    P_DEPT_ID IN DEPARTMENTS.DEPARTMENT_ID%TYPE)
+--  RETURN NUMBER
+--IS
+--  V_COUNT NUMBER;
+--BEGIN
+--  SELECT COUNT(*) INTO V_COUNT FROM EMPLOYEES WHERE DEPARTMENT_ID = P_DEPT_ID;
+--  RETURN V_COUNT;
+--END NO_OF_EMPLOYEES;
+--END EMPLOYEE_PKG;
+--/
 --8. Develop a PL/SQL package called `bank_operations_pkg` to handle basic banking operations. The package should include:
 --   a. A procedure to deposit an amount into an account.
 --   b. A procedure to withdraw an amount from an account, ensuring the balance does not go negative.
 --   c. A function to calculate the interest on the account balance based on the interest rate and time period.
 --   d. A procedure to transfer funds from one account to another.
---
+--CREATE OR REPLACE
+--PACKAGE BANK_OPERATIONS_PKG
+--AS
+--  PROCEDURE DEPOSIT_AMOUNT(
+--      P_ACCOUNT_ID IN NUMBER,
+--      P_AMOUNT     IN NUMBER);
+--  PROCEDURE WITHDRAW_AMOUNT(
+--      P_ACCOUNT_ID IN NUMBER,
+--      P_AMOUNT     IN NUMBER);
+--  FUNCTION CALC_INTEREST(
+--      P_ACCOUNT_ID IN NUMBER,
+--      P_RATE       IN NUMBER,
+--      P_TIME       IN NUMBER)
+--    RETURN NUMBER;
+--  PROCEDURE TRANSFER_FUNDS(
+--      P_FROM   IN NUMBER,
+--      P_TO     IN NUMBER,
+--      P_AMOUNT IN NUMBER);
+--END BANK_OPERATIONS_PKG;
+--/
+--CREATE OR REPLACE
+--PACKAGE BODY BANK_OPERATIONS_PKG
+--AS
+--PROCEDURE DEPOSIT_AMOUNT(
+--    P_ACCOUNT_ID IN NUMBER,
+--    P_AMOUNT     IN NUMBER)
+--IS
+--BEGIN
+--  UPDATE ACCOUNTS
+--  SET BALANCE      = BALANCE + P_AMOUNT
+--  WHERE ACCOUNT_ID = P_ACCOUNT_ID;
+--END DEPOSIT_AMOUNT;
+--PROCEDURE WITHDRAW_AMOUNT(
+--    P_ACCOUNT_ID IN NUMBER,
+--    P_AMOUNT     IN NUMBER)
+--IS
+--  V_BALANCE NUMBER;
+--BEGIN
+--  SELECT BALANCE
+--  INTO V_BALANCE
+--  FROM ACCOUNTS
+--  WHERE ACCOUNT_ID = P_ACCOUNT_ID FOR UPDATE;
+--  IF V_BALANCE    >= P_AMOUNT THEN
+--    UPDATE ACCOUNTS
+--    SET BALANCE      = BALANCE - P_AMOUNT
+--    WHERE ACCOUNT_ID = P_ACCOUNT_ID;
+--  ELSE
+--    RAISE_APPLICATION_ERROR(-20201, 'CANNOT WITHDRAW, BALANCE INSUFFICIENT.');
+--  END IF;
+--END WITHDRAW_AMOUNT;
+--FUNCTION CALC_INTEREST(
+--    P_ACCOUNT_ID IN NUMBER,
+--    P_RATE       IN NUMBER,
+--    P_TIME       IN NUMBER)
+--  RETURN NUMBER
+--IS
+--  V_BALANCE  NUMBER;
+--  V_INTEREST NUMBER;
+--BEGIN
+--  SELECT BALANCE INTO V_BALANCE FROM ACCOUNTS WHERE ACCOUNT_ID = P_ACCOUNT_ID;
+--  V_INTEREST := V_BALANCE * P_RATE * P_TIME / 100;
+--  RETURN V_INTEREST;
+--END CALC_INTEREST;
+--PROCEDURE TRANSFER_FUNDS(
+--    P_FROM   IN NUMBER,
+--    P_TO     IN NUMBER,
+--    P_AMOUNT IN NUMBER)
+--IS
+--BEGIN
+--  WITHDRAW_AMOUNT(P_FROM, P_AMOUNT);
+--  DEPOSIT_AMOUNT(P_TO, P_AMOUNT);
+--END TRANSFER_FUNDS;
+--END BANK_OPERATIONS_PKG;
+--/
+--CREATE TABLE ACCOUNTS
+--  ( ACCOUNT_ID NUMBER PRIMARY KEY, BALANCE NUMBER
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (101, 1000
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (102, 4000
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (103, 10000
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (104, 800
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (105, 15000
+--  );
+--INSERT INTO ACCOUNTS VALUES
+--  (106, 8000
+--  );
+--BEGIN
+--  BANK_OPERATIONS_PKG.DEPOSIT_AMOUNT(101, 1000);
+--  BANK_OPERATIONS_PKG.WITHDRAW_AMOUNT(101, 500);
+--  BANK_OPERATIONS_PKG.WITHDRAW_AMOUNT(104, 900);
+--  DBMS_OUTPUT.PUT_LINE(BANK_OPERATIONS_PKG.CALC_INTEREST(103, 12, 2));
+--  BANK_OPERATIONS_PKG.TRANSFER_FUNDS(103, 104, 5000);
+--  BANK_OPERATIONS_PKG.TRANSFER_FUNDS(101, 106, 5000);
+--END;
+--/
 --9. Create a package named order_management that allows adding and listing orders. It should include:
 --
 --A procedure to add an order (order ID, customer name, order total).
 --A function to calculate the total revenue (sum of all order totals).
 --A cursor to list all orders.
---
+--CREATE OR REPLACE
+--PACKAGE ORDER_MANAGEMENT
+--IS
+--  PROCEDURE ADD_ORDER(
+--      P_ORDER_ID      IN NUMBER,
+--      P_CUSTOMER_NAME IN VARCHAR2,
+--      P_ORDER_TOTAL   IN NUMBER);
+--  FUNCTION TOTAL_REVENUE
+--    RETURN NUMBER;
+--  CURSOR ORDERS_CURSOR
+--    RETURN ORDER%ROWTYPE
+--  IS
+--    SELECT * FROM ORDERS;
+--END ORDER_MANAGEMENT;
+--/
+--CREATE OR REPLACE
+--PACKAGE BODY ORDER_MANAGEMENT
+--IS
+--PROCEDURE ADD_ORDER(
+--    P_ORDER_ID      IN NUMBER,
+--    P_CUSTOMER_NAME IN VARCHAR2,
+--    P_ORDER_TOTAL   IN NUMBER)
+--IS
+--BEGIN
+--  INSERT
+--  INTO ORDERS
+--    (
+--      ORDER_ID,
+--      CUSTOMER_NAME,
+--      ORDER_TOTAL
+--    )
+--    VALUES
+--    (
+--      P_ORDER_ID,
+--      P_CUSTOMER_NAME,
+--      P_ORDER_TOTAL
+--    );
+--END ADD_ORDER;
+--FUNCTION TOTAL_REVENUE
+--  RETURN NUMBER
+--IS
+--  V_TOTAL NUMBER;
+--BEGIN
+--  SELECT SUM(ORDER_TOTAL) INTO V_TOTAL FROM ORDERS;
+--  RETURN V_TOTAL;
+--END TOTAL_REVENUE;
+--END ORDER_MANAGEMENT;
+--/
+--CREATE TABLE ORDERS
+--  (
+--    ORDER_ID      NUMBER PRIMARY KEY,
+--    CUSTOMER_NAME VARCHAR2(20),
+--    ORDER_TOTAL   NUMBER
+--  );
+--BEGIN
+--  ORDER_MANAGEMENT.ADD_ORDER(1, 'NIMISH', 1000);
+--  ORDER_MANAGEMENT.ADD_ORDER(2, 'NITIN', 2000);
+--  ORDER_MANAGEMENT.ADD_ORDER(3, 'NIMISH', 2000);
+--  ORDER_MANAGEMENT.ADD_ORDER(4, 'GIRISH', 1000);
+--END;
+--/
+--DECLARE
+--  TOTAL NUMBER;
+--BEGIN
+--  TOTAL := ORDER_MANAGEMENT.TOTAL_REVENUE;
+--  DBMS_OUTPUT.PUT_LINE('Total Revenue: ' || TOTAL);
+--END;
+--/
+--DECLARE
+--  BEGIN
+--   FOR ORDER_REC IN ORDER_MANAGEMENT.ORDERS_CURSOR LOOP 
+--    DBMS_OUTPUT.PUT_LINE('ORDER ID : ' || ORDER_REC.ORDER_ID);
+--    DBMS_OUTPUT.PUT_LINE('CUSTOMER NAME: ' || ORDER_REC.CUSTOMER_NAME);
+--    DBMS_OUTPUT.PUT_LINE('TOTAL ORDER : ' || ORDER_REC.ORDER_TOTAL);
+--    DBMS_OUTPUT.PUT_LINE('---------------------------------------------');
+--  END LOOP;
+--END;
+--/
 --10. Extend the order_management package with exception handling:
 --
 --MODIFY THE ADD ORDER PROCEDURE TO HANDLE CASES WHERE THE ORDER TOTAL IS NEGATIVE OR ZERO BY RAISING APPROPRIATE EXCEPTIONS.
