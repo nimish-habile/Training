@@ -32,7 +32,19 @@ SET DEFINE ON;
 --  DBMS_OUTPUT.PUT_LINE('ERROR : ' || SQLERRM);
 --END;
 --2.Create a PL/SQL anonymous block that declares a nested table type to store integers. Initialize a nested table variable and insert some random integers into it. Then, loop through the nested table and display the elements.
---
+--DECLARE
+--TYPE INT_TABLE
+--IS
+--  TABLE OF INTEGER;
+--  NESTED_TABLE_OF_INTEGERS INT_TABLE := INT_TABLE();
+--BEGIN
+--  NESTED_TABLE_OF_INTEGERS := INT_TABLE(1,2,3,4,5);
+--  FOR I IN 1 .. NESTED_TABLE_OF_INTEGERS.COUNT
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE(I || ': ' || NESTED_TABLE_OF_INTEGERS(I));
+--  END LOOP;
+--END;
+--/
 --3.Create a PL/SQL anonymous block that uses a cursor to fetch employee names from the "employees" table and stores them in a collection (nested table or associative array).
 --Then, display the employee names from the collection.
 --DECLARE

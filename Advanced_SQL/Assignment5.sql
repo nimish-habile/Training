@@ -2,9 +2,37 @@ SET SERVEROUTPUT ON;
 SET VERIFY OFF;
 SET DEFINE ON;
 --1. Create a PL/SQL program that declares a nested table of integers, populates it with values (e.g., 10, 20, 30), and then displays the elements of the nested table.
+--DECLARE
+--TYPE INT_TABLE
+--IS
+--  TABLE OF INTEGER;
+--  TABLE_OF_NUMBERS INT_TABLE;
+--BEGIN
+--  TABLE_OF_NUMBERS := INT_TABLE(10, 20, 30);
+--  FOR I IN 1 .. TABLE_OF_NUMBERS.COUNT
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE(I || ': ' || TABLE_OF_NUMBERS(I));
+--  END LOOP;
+--END;
+--/
 --2. Create a PL/SQL program that declares a varray of characters with a fixed size of 5.
 --Implement a loop to take input from the user for all five elements of the varray and then display the contents of the varray.
---
+--DECLARE
+--TYPE CHAR_VARRAY IS VARRAY(5) OF VARCHAR2(1);
+--VARRAY_OF_CHARS CHAR_VARRAY := CHAR_VARRAY();
+--BEGIN
+--  VARRAY_OF_CHARS.EXTEND(5);
+--  VARRAY_OF_CHARS(1) := '&ENTER_CHAR_1';
+--  VARRAY_OF_CHARS(2) := '&ENTER_CHAR_2';
+--  VARRAY_OF_CHARS(3) := '&ENTER_CHAR_3';
+--  VARRAY_OF_CHARS(4) := '&ENTER_CHAR_4';
+--  VARRAY_OF_CHARS(5) := '&ENTER_CHAR_5';
+--  FOR I IN 1 .. VARRAY_OF_CHARS.COUNT
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE('Element ' || I || ': ' || VARRAY_OF_CHARS(I));
+--  END LOOP;
+--END;
+--/
 --3. Create a PL/SQL program that declares an associative array (index-by table) of student names and their respective scores in a test. Populate the array with at least five records and then display the student names along with their scores.
 --DECLARE
 --TYPE STUDENT_TABLE_TYPE
@@ -25,7 +53,6 @@ SET DEFINE ON;
 --  END LOOP;
 --END;
 --4. Write a PL/SQL program that uses an associative array of question 3. Calculate the average of all the values of the scores in the array.
-
 --DECLARE
 --TYPE STUDENT_TABLE_TYPE
 --IS
@@ -48,7 +75,31 @@ SET DEFINE ON;
 --  END LOOP;
 --  DBMS_OUTPUT.PUT_LINE(V_SUM/V_COUNT);
 --END;
-
 --5. Create a PL/SQL program that declares a nested table of timestamps.
 --IMPLEMENT A LOOP TO POPULATE THE COLLECTION WITH TIMESTAMPS REPRESENTING DIFFERENT DATES AND TIMES,
 --and then display the timestamps in chronological order.
+--DECLARE
+--TYPE TIMESTAMP_TABLE
+--IS
+--  TABLE OF TIMESTAMP;
+--  MY_TIMESTAMPS TIMESTAMP_TABLE := TIMESTAMP_TABLE();
+--  CURR TIMESTAMP;
+--BEGIN
+--  MY_TIMESTAMPS := TIMESTAMP_TABLE( TIMESTAMP '2023-01-01 10:00:00', TIMESTAMP '2024-07-28 12:30:00', TIMESTAMP '2022-05-15 09:45:00', TIMESTAMP '2023-12-25 18:00:00', TIMESTAMP '2024-11-11 07:15:00' );
+--  FOR I IN 1 .. MY_TIMESTAMPS.COUNT - 1
+--  LOOP
+--    FOR J IN I + 1 .. MY_TIMESTAMPS.COUNT
+--    LOOP
+--      IF MY_TIMESTAMPS(I) > MY_TIMESTAMPS(J) THEN
+--        CURR             := MY_TIMESTAMPS(I);
+--        MY_TIMESTAMPS(I) := MY_TIMESTAMPS(J);
+--        MY_TIMESTAMPS(J) := CURR;
+--      END IF;
+--    END LOOP;
+--  END LOOP;
+--  FOR I IN 1 .. MY_TIMESTAMPS.COUNT
+--  LOOP
+--    DBMS_OUTPUT.PUT_LINE('TIMESTAMP' || I || ': ' || TO_CHAR(MY_TIMESTAMPS(I), 'YYYY-MM-DD HH24:MI:SS'));
+--  END LOOP;
+--END;
+--/

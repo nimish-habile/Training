@@ -1,0 +1,100 @@
+{% extends "accounts/main.html" %} 
+{% block content %} 
+{% include "accounts/status.html" %}
+<br />
+<div class="row">
+  <div class="col-md-5 mb-4">
+    <div class="card shadow border-light">
+      <div
+        class="card-header bg-dark text-white d-flex justify-content-between align-items-center"
+      >
+        <h5 class="mb-0">Customers</h5>
+      </div>
+      <div class="card-body p-4">
+        <table class="table table-hover table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th></th>
+              <th>Customer</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for customer in customers %}
+            <tr>
+              <td>
+                <a
+                  class="btn btn-sm btn-info"
+                  href="{% url 'customer' customer.id %}"
+                  >View</a
+                >
+              </td>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.phone }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7 mb-4">
+    <div class="card shadow border-light">
+      <div
+        class="card-header bg-dark text-white d-flex justify-content-between align-items-center"
+      >
+        <h5 class="mb-0">Last 5 Orders</h5>
+      </div>
+
+      <div class="card-body p-4">
+        <table class="table table-hover table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Product</th>
+              <th>Ordered By</th>
+              <th>Date Ordered</th>
+              <th>Status</th>
+              <th>Update</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            <tr>
+              <td>{{ order.product }}</td>
+              <td>{{ order.customer }}</td>
+              <td>{{ order.date_created|date:"d M Y" }}</td>
+              <td>
+                {% if order.status == "Delivered" %}
+                <span class="badge badge-success">Delivered</span>
+                {% elif order.status == "Pending" %}
+                <span class="badge badge-warning">Pending</span>
+                {% else %}
+                <span class="badge badge-info">Out for delivery</span>
+                {% endif %}
+              </td>
+              <td>
+                <a
+                  class="btn btn-sm btn-info"
+                  href="{% url 'update_order' order.id %}"
+                  >Update</a
+                >
+              </td>
+              <td>
+                <a
+                  class="btn btn-sm btn-danger"
+                  href="{% url 'delete_order' order.id %}"
+                  >Delete</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

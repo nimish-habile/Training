@@ -129,6 +129,43 @@ SET DEFINE ON;
 --5. Transaction Management:
 --a) Write a PL/SQL block that transfers an employee from one department to another. Update the "departments" table and the "employees" table to reflect the change. Ensure that both updates are treated as a single transaction and are committed only if both succeed.
 --b) Create a stored procedure that allows updating an employee's job title and salary simultaneously. If the job title is updated successfully, but the salary update fails, the procedure should roll back the job title change.
+--DECLARE
+--  V_EMPLOYEE_ID EMPLOYEES.EMPLOYEE_ID%TYPE := 100;
+--  V_OLD_DEPARTMENT_ID EMPLOYEES.DEPARTMENT_ID%TYPE;
+--  V_NEW_DEPARTMENT_ID DEPARTMENTS.DEPARTMENT_ID%TYPE := 10;
+--  EX_DEPARTMENT_NOT_FOUND EXCEPTION;
+--  EX_EMPLOYEE_NOT_FOUND   EXCEPTION;
+--BEGIN
+--  SELECT DEPARTMENT_ID
+--  INTO V_OLD_DEPARTMENT_ID
+--  FROM EMPLOYEES
+--  WHERE EMPLOYEE_ID = V_EMPLOYEE_ID;
+--  SELECT DEPARTMENT_ID
+--  INTO V_NEW_DEPARTMENT_ID
+--  FROM DEPARTMENTS
+--  WHERE DEPARTMENT_ID = V_NEW_DEPARTMENT_ID;
+--  UPDATE EMPLOYEES
+--  SET DEPARTMENT_ID = V_NEW_DEPARTMENT_ID
+--  WHERE EMPLOYEE_ID = V_EMPLOYEE_ID;
+--  COMMIT;
+--EXCEPTION
+--WHEN NO_DATA_FOUND THEN
+--  IF SQL%ROWCOUNT = 0 THEN
+--    RAISE EX_EMPLOYEE_NOT_FOUND;
+--  ELSE
+--    RAISE EX_DEPARTMENT_NOT_FOUND;
+--  END IF;
+--WHEN EX_DEPARTMENT_NOT_FOUND THEN
+--  DBMS_OUTPUT.PUT_LINE('Error: New department does not exist.');
+--  ROLLBACK;
+--WHEN EX_EMPLOYEE_NOT_FOUND THEN
+--  DBMS_OUTPUT.PUT_LINE('Error: Employee not found.');
+--  ROLLBACK;
+--WHEN OTHERS THEN
+--  DBMS_OUTPUT.PUT_LINE('An unexpected error occurred: ' || SQLERRM);
+--  ROLLBACK;
+--END;
+--/
 --6. Write a PL/SQL block to retrieve the employee details (employee_id, first_name, last_name, and salary) from the "employees" table for a given department ID (prompt user). If no employees are found, display "No employees found for the given department."
 --DECLARE
 --  V_DEPT_ID EMPLOYEES.DEPARTMENT_ID%TYPE;
@@ -145,7 +182,7 @@ SET DEFINE ON;
 --      SALARY
 --    FROM EMPLOYEES
 --    WHERE DEPARTMENT_ID = V_DEPT_ID;
---    
+--
 --BEGIN
 --  V_DEPT_ID := '&ENTER_DEPT_ID';
 --  OPEN EMP;
