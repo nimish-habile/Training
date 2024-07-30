@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -61,9 +61,9 @@ def loginPage(request):
 
 
 def logoutUser(request):
+    request.session['checkLoggedOut'] = True
     logout(request)
     return redirect("login")
-
 
 @login_required(login_url="login")
 @admin_only
